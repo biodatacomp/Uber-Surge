@@ -2,6 +2,7 @@ package com.halfplatepoha.ubersurge;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -10,9 +11,11 @@ import retrofit2.http.Query;
 public interface UberService {
 
     //--Products
-    Call<ProductsResponse> getAllProducts(
-            @Query("latitude") float latitude,
-            @Query("longitude") float longitude
+    @GET("v1/products/{productId}")
+    Call<ProductResponse> getAllProducts(
+            @Path("productId") String productId,
+            @Query("latitude") double latitude,
+            @Query("longitude") double longitude
     );
 
     //--Price Estimates

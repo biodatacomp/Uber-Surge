@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void callProductsAPI() {
+//        Call<ProductResponse> call = uberService.getAllProducts(12.9555296, 77.7051441);
+    }
+
     private void callPriceEstimateAPI() {
         Call<PriceEstimateResponse> call = uberService.getAllPriceEstimates(12.9555296, 77.7051441, 12.9555296, 77.7051441);
 
