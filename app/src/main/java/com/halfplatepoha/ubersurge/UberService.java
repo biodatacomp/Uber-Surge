@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by MacboolBro on 08/04/16.
@@ -12,7 +13,7 @@ public interface UberService {
 
     //--Products
     @GET("v1/products/{productId}")
-    Call<ProductResponse> getAllProducts(
+    Call<ProductResponse> getProduct(
             @Path("productId") String productId,
             @Query("latitude") double latitude,
             @Query("longitude") double longitude

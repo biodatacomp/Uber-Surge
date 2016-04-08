@@ -6,13 +6,42 @@
     android:orientation="vertical"
     tools:context="com.halfplatepoha.ubersurge.MainActivity">
 
-    <TextView android:id="@+id/tvSurgePricing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.0"
-        android:textSize="36sp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button android:id="@+id/btnGetPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView android:id="@+id/ivProductImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="#f0f0f0"/>
+
+            <TextView android:id="@+id/tvSurgePricing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textSize="36sp"/>
+
+            <Button android:id="@+id/btnGetPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Refresh"
+                android:textSize="20sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"/>
+
+            <LinearLayout android:id="@+id/llProductContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
