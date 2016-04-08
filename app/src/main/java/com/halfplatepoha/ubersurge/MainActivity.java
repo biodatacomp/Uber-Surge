@@ -65,29 +65,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void callPriceEstimateAPI() {
-        Call<PriceEstimateResponse> priceEstimateCall = uberService.getAllPriceEstimates(12.9555296, 77.7051441, 12.9555296, 77.7051441);
+        Observable<PriceEstimateResponse> priceEstimateCall = uberService.getAllPriceEstimates(12.9555296, 77.7051441, 12.9555296, 77.7051441);
 
-        priceEstimateCall.enqueue(new Callback<PriceEstimateResponse>() {
-            @Override
-            public void onResponse(Call<PriceEstimateResponse> call, Response<PriceEstimateResponse> response) {
-                if(response.isSuccessful()) {
-                    estimates = response.body().getPrices();
-                    getProductButtonVHObservable().subscribe(buttonViewHolderSubscriber);
-                } else {
-                    showShortToast(response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PriceEstimateResponse> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
-            }
-        });
+        priceEstimateCall.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(priceEstimateResponseSubscriber);
     }
 
     @RxLogObservable
-    private Observable<ProductButtonViewHolder> getProductButtonVHObservable() {
-        return Observable.just(estimates)
+    private Observable<ProductButtonViewHolder> getProductButtonVHObservable(List<PriceEstimateResponse.Price> prices) {
+        return Observable.just(prices)
                 .flatMap(new Func1<List<PriceEstimateResponse.Price>, Observable<PriceEstimateResponse.Price>>() {
                     @Override
                     public Observable<PriceEstimateResponse.Price> call(List<PriceEstimateResponse.Price> prices) {
@@ -127,14 +114,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         public ProductButtonViewHolder bindPriceResponse(PriceEstimateResponse.Price price) {
             btnProductInfo.setText(price.getDisplay_name());
-            btnProductInfo.setTag(price.getProduct_id());
+            btnProductInfo.setTag(price);
             return this;
         }
 
         @Override
         public void onClick(View v) {
-            String productId = (String)v.getTag();
-            callProductImageAPIs(productId);
+            PriceEstimateResponse.Price price = (PriceEstimateResponse.Price)v.getTag();
+            tvSurgePricing.setText(price.getSurge_multiplier() + "");
+            callProductImageAPIs(price.getProduct_id());
         }
     }
 
@@ -157,6 +145,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    private Subscriber<PriceEstimateResponse> priceEstimateResponseSubscriber = new Subscriber<PriceEstimateResponse>() {
+        @Override
+        public void onCompleted() {}
+
+        @Override
+        public void onError(Throwable e) {}
+
+        @Override
+        public void onNext(PriceEstimateResponse priceEstimateResponse) {
+            getProductButtonVHObservable(priceEstimateResponse.getPrices()).subscribe(buttonViewHolderSubscriber);
+        }
+    };
 
     private Subscriber<ProductButtonViewHolder> buttonViewHolderSubscriber = new Subscriber<ProductButtonViewHolder>() {
         @Override

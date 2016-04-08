@@ -22,7 +22,7 @@ public interface UberService {
     //--Price Estimates
 
     @GET("/v1/estimates/price")
-    Call<PriceEstimateResponse> getAllPriceEstimates(
+    Observable<PriceEstimateResponse> getAllPriceEstimates(
             @Query("start_latitude") double startLatitude,
             @Query("start_longitude") double startLongitude,
             @Query("end_latitude") double endLatitude,
